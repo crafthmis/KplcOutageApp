@@ -23,7 +23,7 @@ func CreateSubscription(Subscription *models.Subscription) (err error) {
 
 // Get Subscription ByID
 func GetSubscriptionByID(Subscription *models.Subscription, id string) (err error) {
-	if err = db.GetDB().Where("sub_id = ?", id).First(Subscription).Error; err != nil {
+	if err = db.GetDB().Where("Subscription_id = ?", id).First(Subscription).Error; err != nil {
 		return err
 	}
 	return nil
