@@ -266,7 +266,6 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("END System is currently busy. Kindly try again"))
 				return
 			}
-
 			var areas []models.Area
 			err = json.Unmarshal([]byte(session.AreaPayload), &areas)
 			if err != nil {
@@ -274,16 +273,31 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("END System is currently busy. Kindly try again"))
 				return
 			}
-			fmt.Printf("\nConstituencyPayload %s", session.ConstituencyPayload)
+			fmt.Printf("\nAreaPayload %s", session.AreaPayload)
 
 			are, err := GetAreaByIndex(areas, lastIndexOf-1)
 			if err != nil {
 				w.Write([]byte("END System is currently busy. Kindly try again"))
 				return
 			}
-			fmt.Printf("\nArea Name %s", are.Name)
 
-			w.Write([]byte("END You have been registered successfully. Thank you."))
+			fmt.Printf("\nArea Name %s", are.Name)
+			updates := map[string]interface{}{
+				"completed": "Yes",
+			}
+			err = services.UpdateUssdSession(updates, session_id)
+			if err != nil {
+				fmt.Println(err.Error())
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
+			err = services.CreateContact(&models.Contact{AreaID: are.AreaID, Msisdn: phone_number})
+
+			if err != nil {
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+			} else {
+				w.Write([]byte("END You have been registered successfully. Thank you."))
+			}
 			return
 		default:
 			w.Write([]byte("END Invalid input"))
