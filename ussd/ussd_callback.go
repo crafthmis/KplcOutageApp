@@ -236,11 +236,53 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 				result := fmt.Sprintf("\n%d. %s", idx+1, area.Name)
 				accumulator = append(accumulator, result)
 			}
+
+			// Save areas
+			jsonData, err := json.MarshalIndent(constituency.Areas, "", "  ")
+			if err != nil {
+				fmt.Println("Error marshalling to JSON:", err)
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
+			fmt.Printf("\njsonData %s", jsonData)
+			updates := map[string]interface{}{
+				"area_payload": string(jsonData),
+			}
+			err = services.UpdateUssdSession(updates, session_id)
+			if err != nil {
+				fmt.Println(err.Error())
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
 			output := strings.Join(accumulator, "")
 			fmt.Println(output)
 			w.Write([]byte(fmt.Sprintf("CON Choose your Area. %s", output)))
 			return
 		case 4:
+			var session models.UssdSession
+			err := services.GetUssdSessionByID(&session, session_id)
+			if err != nil {
+				fmt.Println(err.Error())
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
+
+			var areas []models.Area
+			err = json.Unmarshal([]byte(session.AreaPayload), &areas)
+			if err != nil {
+				fmt.Println("Error unmarshalling JSON:", err)
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
+			fmt.Printf("\nConstituencyPayload %s", session.ConstituencyPayload)
+
+			are, err := GetAreaByIndex(areas, lastIndexOf-1)
+			if err != nil {
+				w.Write([]byte("END System is currently busy. Kindly try again"))
+				return
+			}
+			fmt.Printf("\nArea Name %s", are.Name)
+
 			w.Write([]byte("END You have been registered successfully. Thank you."))
 			return
 		default:
@@ -295,4 +337,12 @@ func GetConstituencyByIndex(constituencies []models.Constituency, idx int) (mode
 		return models.Constituency{}, fmt.Errorf("index out of range")
 	}
 	return constituencies[idx], nil
+}
+
+func GetAreaByIndex(areas []models.Area, idx int) (models.Area, error) {
+
+	if idx < 0 || idx >= len(areas) {
+		return models.Area{}, fmt.Errorf("index out of range")
+	}
+	return areas[idx], nil
 }
