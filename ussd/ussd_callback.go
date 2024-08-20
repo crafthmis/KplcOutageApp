@@ -46,7 +46,7 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		output := strings.Join(accumulator, "")
-		fmt.Println(output)
+		//fmt.Println(output)
 		w.Write([]byte(fmt.Sprintf("CON Welcome to nijulishe. Choose you plan. %s", output)))
 		return
 	} else {
