@@ -22,7 +22,9 @@ func main() {
 		return
 	}
 	fmt.Println("DB successfully connected", os.Getenv("POSTGRES_DB"))
-	
+
+	//db.Migrate()
+
 	r := routes.SetupRouter()
 	//running
 	r.Run()

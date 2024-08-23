@@ -30,7 +30,7 @@ func GetContactByID(Contact *models.Contact, id string) (err error) {
 }
 
 func GetContactContactsByID(Contact *models.Contact, id string) (err error) {
-	if err = db.GetDB().Preload("Contacts").Where("Contact_id = ?", id).First(Contact).Error; err != nil {
+	if err = db.GetDB().Preload("Contacts").Where("cnt_id = ?", id).First(Contact).Error; err != nil {
 		return err
 	}
 	return nil
@@ -45,6 +45,6 @@ func UpdateContact(Contact *models.Contact, id string) (err error) {
 
 // Delete Contact
 func DeleteContact(Contact *models.Contact, id string) (err error) {
-	db.GetDB().Where("Contact_id = ?", id).Delete(Contact)
+	db.GetDB().Where("cnt_id = ?", id).Delete(Contact)
 	return nil
 }

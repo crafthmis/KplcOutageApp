@@ -14,15 +14,16 @@ func Migrate() error {
 
 	// Perform migrations
 	err := DB.AutoMigrate(
-		&models.Area{},
-		&models.Contact{},
-		&models.Constituency{},
-		&models.County{},
-		&models.Region{},
-		&models.Campaign{},
-		&models.Outage{},
-		&models.OutageArea{},
-		// Add other models as needed
+		// &models.Area{},
+		// &models.Contact{},
+		// &models.Constituency{},
+		// &models.County{},
+		// &models.Region{},
+		// &models.Campaign{},
+		// &models.Outage{},
+		// &models.OutageArea{},
+		&models.UssdSession{},
+	// Add other models as needed
 	)
 
 	if err != nil {

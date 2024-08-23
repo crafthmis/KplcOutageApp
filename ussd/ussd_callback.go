@@ -11,6 +11,7 @@ import (
 )
 
 var lastIndexOf int
+var firstIndexOf int
 
 func UssdCallback(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/plain")
@@ -38,8 +39,22 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 			result := fmt.Sprintf("\n%d. %s", sub.SubID, sub.Name)
 			accumulator = append(accumulator, result)
 		}
-
 		err = services.CreateUssdSession(&models.UssdSession{SessionID: session_id, Msisdn: phone_number})
+		if err != nil {
+			fmt.Println(err.Error())
+			w.Write([]byte("END System is currently busy. Kindly try again"))
+			return
+		}
+		jsonData, err := json.MarshalIndent(Subscriptions, "", "  ")
+		if err != nil {
+			fmt.Println("Error marshalling to JSON:", err)
+			w.Write([]byte("END System is currently busy. Kindly try again"))
+			return
+		}
+		updates := map[string]interface{}{
+			"plan_payload": string(jsonData),
+		}
+		err = services.UpdateUssdSession(updates, session_id)
 		if err != nil {
 			fmt.Println(err.Error())
 			w.Write([]byte("END System is currently busy. Kindly try again"))
@@ -54,6 +69,7 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 		cnt := strings.Count(text, "*")
 		fmt.Printf("\nHow many astericks %d", cnt)
 		lastIndexOf = getLastValueAfterAsterisk(text)
+		firstIndexOf = getfirstValueBeforeAsterisk(text)
 		fmt.Printf("\nLast Index %d", lastIndexOf)
 		switch cnt {
 		case 0:
@@ -291,7 +307,7 @@ func UssdCallback(w http.ResponseWriter, r *http.Request) {
 				w.Write([]byte("END System is currently busy. Kindly try again"))
 				return
 			}
-			err = services.CreateContact(&models.Contact{AreaID: are.AreaID, Msisdn: phone_number})
+			err = services.CreateContact(&models.Contact{SubID: firstIndexOf, AreaID: are.AreaID, Msisdn: phone_number})
 
 			if err != nil {
 				w.Write([]byte("END System is currently busy. Kindly try again"))
@@ -320,6 +336,35 @@ func getLastValueAfterAsterisk(s string) int {
 	}
 
 	str := strings.TrimSpace(parts[len(parts)-1])
+	num, err := strconv.Atoi(str)
+	if err != nil {
+		fmt.Println("Error converting string to integer:", err)
+		return -1
+	}
+	// Return the last part (trimmed of any whitespace)
+	return num
+}
+
+func getfirstValueBeforeAsterisk(s string) int {
+
+	if len(s) == 0 {
+		return -1
+	}
+
+	if !strings.Contains(s, "*") {
+		num, err := strconv.Atoi(s)
+		if err != nil {
+			fmt.Println("Error converting string to integer:", err)
+			return -1
+		}
+		return num // Return the original string if no asterisk is found
+	}
+	// Split the string by asterisks
+	parts := strings.Split(s, "*")
+
+	// Check if there are any parts after splitting
+
+	str := strings.TrimSpace(parts[0])
 	num, err := strconv.Atoi(str)
 	if err != nil {
 		fmt.Println("Error converting string to integer:", err)

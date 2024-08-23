@@ -12,7 +12,7 @@ import (
 type OutageInput struct {
 	Message    string    `json:"message"`
 	OutageDate time.Time `json:"outage_date"`
-	SendStatus string    `json:"send_status"`
+	SentStatus string    `json:"sent_status"`
 	Areas      []uint    `json:"areas"` // List of area IDs
 }
 
@@ -27,7 +27,7 @@ func CreateOutageWithAreasHandler(c *gin.Context) {
 	outage := models.Outage{
 		Message:    input.Message,
 		OutageDate: input.OutageDate,
-		SendStatus: input.SendStatus,
+		SentStatus: input.SentStatus,
 	}
 
 	err := services.CreateOutageWithAreas(&outage, input.Areas)

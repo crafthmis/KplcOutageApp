@@ -12,6 +12,7 @@ func CreateOutageWithAreas(outage *models.Outage, areaIDs []uint) error {
 	return db.GetDB().Transaction(func(tx *gorm.DB) error {
 		// Create the outage
 		if err := tx.Create(outage).Error; err != nil {
+			db.GetDB().Rollback()
 			return err
 		}
 
@@ -22,6 +23,7 @@ func CreateOutageWithAreas(outage *models.Outage, areaIDs []uint) error {
 				OtsID:  outage.OtsID,
 			}
 			if err := tx.Create(&outageArea).Error; err != nil {
+				db.GetDB().Rollback()
 				return err
 			}
 		}
