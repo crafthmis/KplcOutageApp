@@ -1,13 +1,12 @@
 package sms
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/edwinwalela/africastalking-go/pkg/sms"
 )
 
-func sendBulk(bulkRequest *sms.BulkRequest) {
+func SendBulk(bulkRequest *sms.BulkRequest) (*sms.Response, error) {
 	// Define Africa's Talking SMS client
 	client := &sms.Client{
 		ApiKey:    os.Getenv("AT_API_KEY"),
@@ -27,7 +26,7 @@ func sendBulk(bulkRequest *sms.BulkRequest) {
 	// Send SMS to the defined recipients
 	response, err := client.SendBulk(bulkRequest)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	fmt.Println(response.Message)
+	return &response, nil
 }

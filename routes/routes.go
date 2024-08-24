@@ -48,6 +48,7 @@ func SetupRouter() *gin.Engine {
 		grp.POST("/ussd_callback", gin.WrapF(ussd.UssdCallback))
 
 		grp.POST("/outages", controllers.CreateOutageWithAreasHandler)
+		grp.POST("/sendsms", controllers.SendBulkSMS)
 
 	}
 	return r

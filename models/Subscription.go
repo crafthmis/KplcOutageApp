@@ -9,6 +9,7 @@ type Subscription struct {
 	Amount      int64     `gorm:"column:amount;not null"`
 	DateCreated time.Time `json:"-" , gorm:"column:date_created;autoCreateTime"`
 	LastUpdate  time.Time `json:"-" , gorm:"column:last_update;autoUpdateTime"`
+	Contact     *Contact  `gorm:"foreignKey:SubID;association_foreignkey:SubID"`
 }
 
 func (Subscription) TableName() string {
