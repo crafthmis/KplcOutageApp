@@ -50,7 +50,7 @@ func GetAreaContacts(c *gin.Context) {
 // Create Area
 func CreateArea(c *gin.Context) {
 	var Area models.Area
-	c.BindJSON(&Area)
+	c.ShouldBindJSON(&Area)
 
 	err := services.CreateArea(&Area)
 	if err != nil {
@@ -71,7 +71,7 @@ func UpdateArea(c *gin.Context) {
 		c.JSON(http.StatusNotFound, Area)
 	}
 
-	c.BindJSON(&Area)
+	c.ShouldBindJSON(&Area)
 
 	err = services.UpdateArea(&Area, id)
 	if err != nil {

@@ -37,7 +37,7 @@ func GetSubscription(c *gin.Context) {
 // Create Subscription
 func CreateSubscription(c *gin.Context) {
 	var Subscription models.Subscription
-	c.BindJSON(&Subscription)
+	c.ShouldBindJSON(&Subscription)
 
 	err := services.CreateSubscription(&Subscription)
 	if err != nil {
@@ -58,7 +58,7 @@ func UpdateSubscription(c *gin.Context) {
 		c.JSON(http.StatusNotFound, Subscription)
 	}
 
-	c.BindJSON(&Subscription)
+	c.ShouldBindJSON(&Subscription)
 
 	err = services.UpdateSubscription(&Subscription, id)
 	if err != nil {

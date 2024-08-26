@@ -46,7 +46,7 @@ func EnvSetup() error {
 		if err != nil {
 			return fmt.Errorf("failed to set environment variable %s: %w", key, err)
 		}
-		//fmt.Printf("key  %s : set to %s environment variable \n", key, value)
+		fmt.Printf("key  %s : set to %s environment variable \n", key, value)
 
 	}
 

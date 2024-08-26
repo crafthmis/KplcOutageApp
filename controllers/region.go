@@ -37,7 +37,7 @@ func GetRegion(c *gin.Context) {
 // Create Region
 func CreateRegion(c *gin.Context) {
 	var Region models.Region
-	c.BindJSON(&Region)
+	c.ShouldBindJSON(&Region)
 
 	err := services.CreateRegion(&Region)
 	if err != nil {
@@ -58,7 +58,7 @@ func UpdateRegion(c *gin.Context) {
 		c.JSON(http.StatusNotFound, Region)
 	}
 
-	c.BindJSON(&Region)
+	c.ShouldBindJSON(&Region)
 
 	err = services.UpdateRegion(&Region, id)
 	if err != nil {

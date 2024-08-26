@@ -2,7 +2,6 @@ package sms
 
 import (
 	"os"
-
 	"github.com/edwinwalela/africastalking-go/pkg/sms"
 )
 

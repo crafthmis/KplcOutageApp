@@ -23,14 +23,14 @@ func CreateSubscription(Subscription *models.Subscription) (err error) {
 
 // Get Subscription ByID
 func GetSubscriptionByID(Subscription *models.Subscription, id string) (err error) {
-	if err = db.GetDB().Where("Subscription_id = ?", id).First(Subscription).Error; err != nil {
+	if err = db.GetDB().Where("sub_id = ?", id).First(Subscription).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func GetSubscriptionContactsByID(Subscription *models.Subscription, id string) (err error) {
-	if err = db.GetDB().Preload("Contacts").Where("Subscription_id = ?", id).First(Subscription).Error; err != nil {
+	if err = db.GetDB().Preload("Contacts").Where("sub_id = ?", id).First(Subscription).Error; err != nil {
 		return err
 	}
 	return nil
@@ -45,6 +45,6 @@ func UpdateSubscription(Subscription *models.Subscription, id string) (err error
 
 // Delete Subscription
 func DeleteSubscription(Subscription *models.Subscription, id string) (err error) {
-	db.GetDB().Where("Subscription_id = ?", id).Delete(Subscription)
+	db.GetDB().Where("sub_id = ?", id).Delete(Subscription)
 	return nil
 }

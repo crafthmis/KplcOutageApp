@@ -12,7 +12,7 @@ import (
 func SendBulkSMS(c *gin.Context) {
 	var bulkRequest at.BulkRequest
 
-	if err := c.BindJSON(&bulkRequest); err != nil {
+	if err := c.ShouldBindJSON(&bulkRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
 	}

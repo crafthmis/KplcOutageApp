@@ -23,14 +23,7 @@ func CreateContact(Contact *models.Contact) (err error) {
 
 // Get Contact ByID
 func GetContactByID(Contact *models.Contact, id string) (err error) {
-	if err = db.GetDB().Where("Contact_id = ?", id).First(Contact).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func GetContactContactsByID(Contact *models.Contact, id string) (err error) {
-	if err = db.GetDB().Preload("Contacts").Where("cnt_id = ?", id).First(Contact).Error; err != nil {
+	if err = db.GetDB().Where("cnt_id = ?", id).First(Contact).Error; err != nil {
 		return err
 	}
 	return nil

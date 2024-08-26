@@ -44,11 +44,23 @@ func SetupRouter() *gin.Engine {
 		grp.PUT("/subscription/:id", controllers.UpdateSubscription)
 		grp.DELETE("/subscription/:id", controllers.DeleteSubscription)
 
+		//contact
+		grp.GET("/contacts", controllers.GetContacts)
+		grp.GET("/contact/:id", controllers.GetContact)
+		grp.POST("/contact", controllers.CreateContact)
+		grp.PUT("/contact/:id", controllers.UpdateContact)
+		grp.DELETE("/contact/:id", controllers.DeleteContact)
+
 		// ussd callback
 		grp.POST("/ussd_callback", gin.WrapF(ussd.UssdCallback))
-
+		//utils
 		grp.POST("/outages", controllers.CreateOutageWithAreasHandler)
 		grp.POST("/sendsms", controllers.SendBulkSMS)
+
+		//Auth
+		grp.POST("/login", controllers.Login)
+		grp.GET("/logout", controllers.Logout)
+		grp.GET("/premium", controllers.Premium)
 
 	}
 	return r

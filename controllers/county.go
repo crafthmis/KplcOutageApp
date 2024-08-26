@@ -37,7 +37,7 @@ func GetCounty(c *gin.Context) {
 // Create County
 func CreateCounty(c *gin.Context) {
 	var County models.County
-	c.BindJSON(&County)
+	c.ShouldBindJSON(&County)
 
 	err := services.CreateCounty(&County)
 	if err != nil {
@@ -58,7 +58,7 @@ func UpdateCounty(c *gin.Context) {
 		c.JSON(http.StatusNotFound, County)
 	}
 
-	c.BindJSON(&County)
+	c.ShouldBindJSON(&County)
 
 	err = services.UpdateCounty(&County, id)
 	if err != nil {
