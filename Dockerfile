@@ -13,6 +13,7 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 COPY config/env.json /app/config/env.json
+COPY backup.sql /docker-entrypoint-initdb.d/backup.sql
 
 # Build the application
 RUN go build -o main .
