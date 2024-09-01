@@ -16,6 +16,9 @@ services:
 
   db:
     image: postgres:13
+    environment:
+      TZ: "Africa/Nairobi"
+      PGTZ: "Africa/Nairobi"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
