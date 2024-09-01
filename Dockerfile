@@ -12,6 +12,7 @@ RUN go mod download
 
 # Copy the source code into the container
 COPY . .
+COPY config/env.json /app/config/env.json
 
 # Build the application
 RUN go build -o main .
