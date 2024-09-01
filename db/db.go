@@ -11,6 +11,15 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+type DBConfig struct {
+	Host     string
+	Port     int
+	User     string
+	DBName   string
+	Password string
+	SSLMode  string
+}
+
 var DB *gorm.DB
 
 func BuildDBConfig() *DBConfig {
