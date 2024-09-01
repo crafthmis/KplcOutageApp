@@ -26,7 +26,12 @@ func main() {
 	//db.Migrate()
 
 	r := routes.SetupRouter()
-	//running
-	r.Run()
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000" // default to 3000 if PORT is not set
+	}
+
+	r.Run(fmt.Sprintf(":%s", port))
+	//running
 }

@@ -20,6 +20,7 @@ func BuildDBConfig() *DBConfig {
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("POSTGRES_DB"),
+		SSLMode:  os.Getenv("POSTGRES_SSL_MODE"),
 	}
 	return &dbConfig
 }
@@ -35,12 +36,13 @@ func portConv(s string) int {
 
 func DbURL(dbConfig *DBConfig) string {
 	return fmt.Sprintf(
-		"user=%s password=%s host=%s port=%d dbname=%s sslmode=disable",
+		"user=%s password=%s host=%s port=%d dbname=%s sslmode=%s",
 		dbConfig.User,
 		dbConfig.Password,
 		dbConfig.Host,
 		dbConfig.Port,
 		dbConfig.DBName,
+		dbConfig.SSLMode,
 	)
 }
 

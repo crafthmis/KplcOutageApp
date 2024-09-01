@@ -1,23 +1,23 @@
-FROM golang:1.20-alpine AS builder
+# Start from the official Go image
+FROM golang:1.23
 
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy go mod and sum files
 COPY go.mod go.sum ./
+
+# Download all dependencies
 RUN go mod download
 
-COPY *.go ./
+# Copy the source code into the container
+COPY . .
 
+# Build the application
 RUN go build -o main .
 
-FROM alpine:latest
+# Expose port 8080 to the outside world
+EXPOSE 3000
 
-WORKDIR /app
-
-COPY --from=builder /app/main .
-COPY env.json .
-
-RUN apk --no-cache add ca-certificates
-
-ENV GO_ENV=development
-
+# Command to run the executable
 CMD ["./main"]
