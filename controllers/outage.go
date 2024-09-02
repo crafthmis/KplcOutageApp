@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"kplc-outage-app/models"
 	"kplc-outage-app/services"
 	"net/http"
@@ -34,6 +35,32 @@ func CreateOutageWithAreasHandler(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create outage with areas"})
 		return
+	}
+
+	//create campaign messages
+	for _, areaId := range input.Areas {
+		var area models.Area
+
+		err = services.GetAreaContactsByID(&area, fmt.Sprintf("%d", areaId))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch contacts"})
+			return
+		}
+
+		for _, contact := range area.Contacts {
+
+			campaign := models.Campaign{
+				OtsID:   outage.OtsID,
+				Msisdn:  contact.Msisdn,
+				Message: input.Message,
+			}
+			err := services.CreateCampaign(&campaign)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save campaigns"})
+				return
+			}
+		}
+
 	}
 
 	// Fetch the created outage with its areas
