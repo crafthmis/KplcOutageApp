@@ -9,21 +9,42 @@ services:
       - "${PORT:-3000}:${PORT:-3000}"
     volumes:
       - ./config:/app/config
+      - ./entrypoint.sh:/app/entrypoint.sh
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - GO_ENV=${ENVIRONMENT:-development}
+    networks:
+      - mynetwork
+    command: ["sh", "-c", "while ! nc -z db ${POSTGRES_PORT:-5432}; do sleep 1; done; echo 'Database is ready!'; /app/entrypoint.sh"]
 
   db:
     image: postgres:13
     environment:
-      TZ: "Africa/Nairobi"
-      PGTZ: "Africa/Nairobi"
+      - TZ=Africa/Nairobi
+      - PGTZ=Africa/Nairobi
+      - POSTGRES_DB=${POSTGRES_DB:-KPLCCLOUD}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
     volumes:
+      - ./config:/config
+      - ./entrypoint.sh:/app/entrypoint.sh
       - postgres_data:/var/lib/postgresql/data
       - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-KPLCCLOUD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - mynetwork
 
 volumes:
   postgres_data:
+
+networks:
+  mynetwork:
+    driver: bridge
