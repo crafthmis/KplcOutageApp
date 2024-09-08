@@ -36,7 +36,8 @@
 FROM golang:1.23
 
 # Install necessary tools
-RUN apt-get update && apt-get install -y jq
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 
 # Set the working directory
 WORKDIR /app
@@ -51,10 +52,10 @@ RUN go mod download
 COPY . .
 
 # Copy the entrypoint script
-COPY entrypoint.sh /app/entrypoint.sh
+#COPY entrypoint.sh /app/entrypoint.sh
 
 # Make the entrypoint script executable
-RUN chmod +x /app/entrypoint.sh
+#RUN chmod +x /app/entrypoint.sh
 
 # Build the application
 RUN go build -o main .
@@ -63,4 +64,5 @@ RUN go build -o main .
 EXPOSE 3000
 
 # Set the entrypoint script as the entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+# ENTRYPOINT ["/app/entrypoint.sh"]
+# CMD ["./main"]
