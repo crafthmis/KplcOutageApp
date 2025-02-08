@@ -8,8 +8,10 @@ import (
 type Outage struct {
 	OtsID       uint `gorm:"primaryKey;column:ots_id;autoIncrement"`
 	Message     string
+	OutageType  string       `gorm:"column:outage_type"`
 	OutageDate  time.Time    `gorm:"column:outage_date"`
 	SentStatus  string       `gorm:"column:sent_status"`
+	OutageHash  string       `gorm:"column:outage_hash"`
 	DateCreated time.Time    `gorm:"column:date_created;autoCreateTime"`
 	LastUpdate  time.Time    `gorm:"column:last_update;autoUpdateTime"`
 	Areas       []OutageArea `gorm:"foreignKey:OtsID;association_foreignkey:OtsID"`

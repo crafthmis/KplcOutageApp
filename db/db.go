@@ -84,6 +84,7 @@ func DatabaseInit() error {
 
 	// Set max lifetime of a connection
 	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.Exec(`set search_path='kplcapp'`)
 
 	return nil
 }

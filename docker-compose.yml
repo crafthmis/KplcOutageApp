@@ -16,7 +16,7 @@ services:
     environment:
       - GO_ENV=${ENVIRONMENT:-development}
     networks:
-      - mynetwork
+      - node-network
     command: ["sh", "-c", "while ! nc -z db ${POSTGRES_PORT:-5432}; do sleep 1; done; echo 'Database is ready!'; ./main"]
 
   db:
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./config/env.json:/app/config/env.json
       - ./entrypoint.sh:/docker-entrypoint-initdb.d/entrypoint.sh
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
       - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-KPLCCLOUD}"]
@@ -44,11 +44,11 @@ services:
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     networks:
-      - mynetwork
+      - node-network
 
 volumes:
-  postgres_data:
+  pgdata:
 
 networks:
-  mynetwork:
+  node-network:
     driver: bridge

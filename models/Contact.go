@@ -14,10 +14,10 @@ type Contact struct {
 	Msisdn       string
 	FirstName    string        `gorm:"column:first_name"`
 	LastName     string        `gorm:"column:last_name"`
-	Username     string        `json:"-",gorm:"column:username"`
-	Password     string        `gorm:"column:password"`
-	Email        string        `gorm:"column:email"`
-	AuthToken    string        `json:"-",gorm:"column:auth_token"`
+	//Username     string        `json:"-",gorm:"column:username"`
+	//Password     string        `gorm:"column:password"`
+	//Email        string        `gorm:"column:email"`
+	//AuthToken    string        `json:"-",gorm:"column:auth_token"`
 	DateCreated  time.Time     `json:"-",gorm:"column:date_created;autoCreateTime"`
 	LastUpdate   time.Time     `json:"-",gorm:"column:last_update;autoUpdateTime"`
 	Area         *Area         `gorm:"foreignKey:AreaID"`

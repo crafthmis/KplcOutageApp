@@ -386,7 +386,8 @@ ALTER TABLE public.tbl_outage OWNER TO postgres;
 CREATE TABLE public.tbl_outage_area (
     oct_id integer NOT NULL,
     ots_id integer NOT NULL,
-    area_id integer NOT NULL
+    area_id integer NOT NULL,
+    message character varying(4000)
 );
 
 

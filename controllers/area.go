@@ -35,15 +35,15 @@ func GetArea(c *gin.Context) {
 }
 
 func GetAreaContacts(c *gin.Context) {
-	var Area models.Area
+	var Contacts []models.Contact
 
 	id := c.Params.ByName("id")
 
-	err := services.GetAreaContactsByID(&Area, id)
+	err := services.GetAreaContactsByID(&Contacts, id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, Area.Contacts)
+		c.JSON(http.StatusOK, Contacts)
 	}
 }
 

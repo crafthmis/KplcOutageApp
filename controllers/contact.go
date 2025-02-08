@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"kplc-outage-app/models"
 	"kplc-outage-app/services"
-	"kplc-outage-app/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +41,7 @@ func CreateContact(c *gin.Context) {
 	c.ShouldBindJSON(&Contact)
 
 	var errHash error
-	Contact.Password, errHash = utils.GenerateHashPassword(Contact.Password)
+	//Contact.Password, errHash = utils.GenerateHashPassword(Contact.Password)
 
 	if errHash != nil {
 		c.JSON(500, gin.H{"error": "could not generate password hash"})

@@ -47,7 +47,7 @@ func SetupRouter() *gin.Engine {
 		//contact
 		grp.GET("/contacts", controllers.GetContacts)
 		grp.GET("/contact/:id", controllers.GetContact)
-		grp.POST("/contact", controllers.CreateContact)
+		//grp.POST("/contact", controllers.CreateContact)
 		grp.PUT("/contact/:id", controllers.UpdateContact)
 		grp.DELETE("/contact/:id", controllers.DeleteContact)
 

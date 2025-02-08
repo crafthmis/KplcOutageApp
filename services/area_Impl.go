@@ -23,14 +23,14 @@ func CreateArea(Area *models.Area) (err error) {
 
 // Get Area ByID
 func GetAreaByID(Area *models.Area, id string) (err error) {
-	if err = db.GetDB().Where("area_id = ?", id).First(Area).Error; err != nil {
+	if err = db.GetDB().Model(Area).Where("area_id = ?", id).First(Area).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetAreaContactsByID(Area *models.Area, id string) (err error) {
-	if err = db.GetDB().Preload("Contacts").Where("area_id = ?", id).First(Area).Error; err != nil {
+func GetAreaContactsByID(Contacts *[]models.Contact, id string) (err error) {
+	if err = db.GetDB().Where("area_id = ?", id).Find(Contacts).Error; err != nil {
 		return err
 	}
 	return nil
